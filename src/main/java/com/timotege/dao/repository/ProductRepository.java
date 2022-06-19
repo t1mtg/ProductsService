@@ -13,4 +13,5 @@ import java.util.UUID;
 @Repository
 public interface ProductRepository extends JpaRepository<ShopUnit, UUID> {
     List<ShopUnit> findByDateGreaterThanEqualAndDateLessThanEqual(LocalDateTime dateTime1, LocalDateTime dateTime2);
+    List<ShopUnit> findByParentId(UUID id);
 }

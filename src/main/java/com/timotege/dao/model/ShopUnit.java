@@ -36,7 +36,7 @@ public class ShopUnit {
 
     @Column(name = "price")
     private Integer price;
-    @OneToMany(mappedBy = "parentId", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "parentId", cascade = CascadeType.ALL)
     private List<ShopUnit> children = new ArrayList<>();
 
     public ShopUnit(UUID id, @Nullable UUID parentId, String name, LocalDateTime date, ShopUnitType type, Integer price) {

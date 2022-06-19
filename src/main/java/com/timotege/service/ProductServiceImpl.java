@@ -75,6 +75,7 @@ public class ProductServiceImpl implements ProductService {
             } else {
                 history.put(shopUnit.getId(), new ArrayList<>());
             }
+
             productRepository.save(shopUnit);
             updateCategoryPrice(getShopUnit(shopUnit.getId().toString()), shopUnit.getDate());
         }
@@ -102,8 +103,7 @@ public class ProductServiceImpl implements ProductService {
                 throw new EmptyResultDataAccessException("Item not found", 1);
             }
 
-           /* if (shopUnit.getType().equals(ShopUnitType.OFFER))
-                shopUnit.setChildren(null);*/
+            getNullChildrenForOffer(shopUnit);
 
             return shopUnit;
         } catch (IllegalArgumentException e) {
@@ -116,10 +116,30 @@ public class ProductServiceImpl implements ProductService {
     public void updateCategoryPrice(ShopUnit shopUnit, LocalDateTime date) {
         if (shopUnit.getType().equals(ShopUnitType.CATEGORY)) {
             Integer avgValue = null;
-            if (shopUnit.getChildren().size() > 0)
-                avgValue = shopUnit.getChildren().stream()
-                        .filter(shopUnit1 -> shopUnit1.getPrice() != null)
-                        .mapToInt(ShopUnit::getPrice).sum() / shopUnit.getChildren().size();
+            if (productRepository.findByParentId(shopUnit.getId()).size() > 0) {
+                var children = productRepository.findByParentId(shopUnit.getId());
+                Integer sum = 0;
+                Integer count = 0;
+                for (var ch : children) {
+                    if (ch.getType().equals(ShopUnitType.OFFER)) {
+                        sum += ch.getPrice();
+                        count++;
+                    } else {
+                        var cnt = productRepository.findByParentId(ch.getId()).size();
+                        if (cnt != 0) {
+                            sum += ch.getPrice() * cnt;
+                            count += cnt;
+                        }
+                    }
+                }
+
+                if (count != 0)
+                    avgValue = sum / count;
+                /*avgValue = productRepository.findByParentId(shopUnit.getId()).stream()
+                        .filter(shopUnit1 -> shopUnit1.getType().equals(ShopUnitType.OFFER))
+                        .mapToInt(ShopUnit::getPrice).sum() / productRepository.findByParentId(shopUnit.getId()).size();*/
+
+            }
             shopUnit.setPrice(avgValue);
             shopUnit.setDate(date);
             productRepository.save(shopUnit);
@@ -169,6 +189,16 @@ public class ProductServiceImpl implements ProductService {
             return true;
         } catch (DateTimeParseException e) {
             return false;
+        }
+    }
+
+    private void getNullChildrenForOffer(ShopUnit shopUnit) {
+        if (shopUnit.getType().equals(ShopUnitType.OFFER)) {
+            shopUnit.setChildren(null);
+        } else {
+            for (var child : productRepository.findByParentId(shopUnit.getId())) {
+                getNullChildrenForOffer(child);
+            }
         }
     }
 }
