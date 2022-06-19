@@ -1,0 +1,57 @@
+_id: req_e1cdde65f5d44d8e85fb7f3eea5e9f55
+type: Request
+parentId: wrk_6725417c1e1c44948ae1d2a32691d879
+modified: 1655637022472
+created: 1654433636284
+url: http://localhost:8080/imports
+name: imports
+description: ""
+method: POST
+body:
+  mimeType: application/json
+  text: |+
+    
+    {
+      "items": [
+    		{
+          "id": "3fa85f64-5717-4562-b3fc-2c963f66a000",
+          "name": "toyota",
+          "parentId": null,
+          "price": null,
+          "type": "CATEGORY"
+        },
+    		
+        {
+          "id": "3fa85f64-5717-4562-b3fc-2c963f66a003",
+          "name": "prius",
+          "parentId": "3fa85f64-5717-4562-b3fc-2c963f66a000",
+          "price": 3333,
+          "type": "OFFER"
+        },
+    		
+    		{
+          "id": "3fa85f64-5717-4562-b3fc-2c963f66a002",
+          "name": "camry",
+          "parentId": "3fa85f64-5717-4562-b3fc-2c963f66a000",
+          "price": 5555,
+          "type": "OFFER"
+        }
+
+      ],
+      "updateDate": "2022-05-27T23:15:01.000Z"
+    }
+
+parameters: []
+headers:
+  - name: Content-Type
+    value: application/json
+    id: pair_cb489b017ac647bf94a58bacc5ede2e1
+authentication: {}
+metaSortKey: -1654433636284
+isPrivate: false
+settingStoreCookies: true
+settingSendCookies: true
+settingDisableRenderRequestBody: false
+settingEncodeUrl: true
+settingRebuildPath: true
+settingFollowRedirects: global
