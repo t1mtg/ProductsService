@@ -16,6 +16,8 @@
 	<description>Yandex backend school test task</description>
 	<properties>
 		<java.version>18</java.version>
+		<maven.test.skip>true</maven.test.skip>
+
 	</properties>
 	<dependencies>
 		<dependency>
