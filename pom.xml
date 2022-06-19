@@ -55,6 +55,7 @@
     </dependencies>
 
 	<build>
+		<finalName>marketapi</finalName>
 		<plugins>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
@@ -62,15 +63,19 @@
 				<version>${project.parent.version}</version>
 			</plugin>
 			<plugin>
-
-				<groupId>org.codehaus.mojo</groupId>
-
-				<artifactId>exec-maven-plugin</artifactId>
-
-				<version>1.6.0</version>
-
-				<executions>
-				</executions>
+				<!-- Build an executable JAR -->
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-jar-plugin</artifactId>
+				<version>3.1.0</version>
+				<configuration>
+					<archive>
+						<manifest>
+							<addClasspath>true</addClasspath>
+							<classpathPrefix>lib/</classpathPrefix>
+							<mainClass>com.timotege.ProductServiceApplication</mainClass>
+						</manifest>
+					</archive>
+				</configuration>
 			</plugin>
 		</plugins>
 	</build>
