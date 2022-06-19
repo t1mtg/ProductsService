@@ -11,7 +11,7 @@ public class DateTry {
 
     public static void main(String[] args) {
         LocalDateTime now = LocalDateTime.now();
-        LocalDateTime.parse(now, DateTimeFormatter.ofLocalizedDateTime(FormatStyle.FULL));
+        //LocalDateTime.parse(now, DateTimeFormatter.ofLocalizedDateTime(FormatStyle.FULL));
     }
 
 }
