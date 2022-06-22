@@ -1,7 +1,5 @@
 package com.timotege.dao.repository;
 
-import com.timotege.dao.model.ShopUnit;
-import com.timotege.dao.model.ShopUnitImport;
 import com.timotege.dao.model.ShopUnitStatisticUnit;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
@@ -11,7 +9,7 @@ import java.util.List;
 import java.util.UUID;
 
 @Repository
-public interface ProductRepository extends JpaRepository<ShopUnit, UUID> {
-    List<ShopUnit> findByDateIsBetween(LocalDateTime dateTime1, LocalDateTime dateTime2);
-    List<ShopUnit> findByParentId(UUID id);
+public interface HistoryRepository extends JpaRepository<ShopUnitStatisticUnit, Long> {
+    List<ShopUnitStatisticUnit> findByDateTimeGreaterThanEqualAndDateTimeLessThanAndUnitId(LocalDateTime dateTime1, LocalDateTime dateTime2, UUID id);
+    void deleteAllByUnitId(UUID id);
 }

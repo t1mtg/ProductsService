@@ -5,8 +5,8 @@ import com.timotege.dao.model.ShopUnit;
 import com.timotege.dao.model.ShopUnitImportRequest;
 import com.timotege.dao.model.ShopUnitStatisticResponse;
 import com.timotege.exception.InvalidDataException;
+import com.timotege.exception.ItemNotFoundException;
 import com.timotege.service.ProductService;
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -36,28 +36,26 @@ public class ProductController {
         return HttpStatus.OK;
     }
 
-    @GetMapping("/sales/{date}")
-    public ShopUnitStatisticResponse getUnitsWithPriceChanged(@PathVariable String date) {
+    @GetMapping("/sales")
+    public ShopUnitStatisticResponse getUnitsWithPriceChanged(@RequestParam String date) {
         return productService.getUnitsWithPriceChanged(date);
     }
 
     @GetMapping("/node/{id}/statistic")
     public ShopUnitStatisticResponse getStatistics(@PathVariable String id,
-                                                   @RequestParam(value = "start") String dateStart,
-                                                   @RequestParam(value = "end") String dateFinish) {
-        return productService.getStatistics(id, dateStart, dateFinish);
+                                                   @RequestParam String dateStart,
+                                                   @RequestParam String dateEnd) {
+        return productService.getStatistics(id, dateStart, dateEnd);
     }
 
 
-
     @ExceptionHandler(InvalidDataException.class)
-
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public Error handleWrongInput() {
         return new Error(400, "Validation Failed");
     }
 
-    @ExceptionHandler(EmptyResultDataAccessException.class)
+    @ExceptionHandler(ItemNotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public Error unitNotFound() {
         return new Error(404, "Item not found");

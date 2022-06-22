@@ -1,12 +1,15 @@
 package com.timotege.dao.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.lang.Nullable;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.UUID;
 
 @Entity
@@ -73,7 +76,14 @@ public class ShopUnit {
         return name;
     }
 
-    public LocalDateTime getDate() {
+
+    public String getDate() {
+        var formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
+        return date.format(formatter.withLocale(Locale.ROOT));
+    }
+
+    @JsonIgnore
+    public LocalDateTime getDateInLocalDateTimeFormat() {
         return date;
     }
 
