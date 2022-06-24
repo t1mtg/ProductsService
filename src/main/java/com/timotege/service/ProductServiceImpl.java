@@ -72,6 +72,12 @@ public class ProductServiceImpl implements ProductService {
     }
 
     private void validateShopUnit(ShopUnitImport shopUnitImport, String date) {
+        if (shopUnitImport.getId() == null
+                || shopUnitImport.getName() == null
+                || shopUnitImport.getType() == null) {
+            throw new InvalidDataException("Invalid argument");
+        }
+
         if (shopUnitImport.getType().equals(ShopUnitType.CATEGORY) && shopUnitImport.getPrice() != null) {
             throw new InvalidDataException("Category price should be null");
         }
@@ -86,11 +92,6 @@ public class ProductServiceImpl implements ProductService {
             throw new InvalidDataException("Offer price should be greater than null");
         }
 
-        if (shopUnitImport.getId() == null
-                || shopUnitImport.getName() == null
-                || shopUnitImport.getType() == null) {
-            throw new InvalidDataException("Invalid argument");
-        }
 
         if (shopUnitImport.getParentId() != null
                 && productRepository.findById(shopUnitImport.getParentId()).isPresent()) {
@@ -107,6 +108,9 @@ public class ProductServiceImpl implements ProductService {
         try {
             UUID uuid = UUID.fromString(id);
             var shopUnit = getShopUnit(id);
+            if (shopUnit == null) {
+                throw new ItemNotFoundException("Item not found");
+            }
             productRepository.deleteById(uuid);
             historyRepository.deleteAllByUnitId(uuid);
             if (shopUnit.getParentId() != null)
